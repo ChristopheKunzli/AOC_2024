@@ -5,8 +5,7 @@ public class Day5 {
     private List<Pair> pairs = new ArrayList<>();
     private List<List<Integer>> numbers = new ArrayList<>();
 
-    private record Pair(int left, int right) {
-    }
+    private record Pair(int left, int right) { }
 
     public void solve(String fileName) {
         parse(Utils.getStrings(fileName));
@@ -17,14 +16,14 @@ public class Day5 {
 
     private void parse(List<String> text) {
         boolean flag = true;
-        for (int i = 0; i < text.size(); ++i) {
-            if (text.get(i).isEmpty()) {
+        for (String string : text) {
+            if (string.isEmpty()) {
                 flag = false;
                 continue;
             }
 
             if (flag) {
-                String[] parts = text.get(i).split("\\|");
+                String[] parts = string.split("\\|");
 
                 int a = Integer.parseInt(parts[0]);
                 int b = Integer.parseInt(parts[1]);
@@ -32,7 +31,7 @@ public class Day5 {
                 pairs.add(new Pair(a, b));
             } else {
                 List<Integer> list = new ArrayList<>();
-                for (String s : text.get(i).split(",")) {
+                for (String s : string.split(",")) {
                     list.add(Integer.parseInt(s));
                 }
                 numbers.add(list);
