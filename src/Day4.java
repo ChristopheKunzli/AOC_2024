@@ -116,10 +116,9 @@ public class Day4 {
 
     private int part2() {
         int count = 0;
-        for (int i = 0; i < text.size(); ++i) {
-            for (int j = 0; j < text.get(i).length(); ++j) {
-                boolean isInside = i > 0 && j > 0 && i < text.size() - 1 && j < text.get(i).length() - 1;
-                if (isInside && text.get(i).charAt(j) == 'A') {
+        for (int i = 1; i < text.size() - 1; ++i) {
+            for (int j = 1; j < text.get(i).length() - 1; ++j) {
+                if(text.get(i).charAt(j) == 'A') {
                     char topLeft = text.get(i - 1).charAt(j - 1);
                     char topRight = text.get(i - 1).charAt(j + 1);
                     char bottomLeft = text.get(i + 1).charAt(j - 1);
