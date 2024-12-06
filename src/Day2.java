@@ -44,7 +44,7 @@ public class Day2 {
 
         int count = 0;
         for (var report : reports) {
-            for(int i = 0; i < report.size(); i++) {
+            for (int i = 0; i < report.size(); i++) {
                 List<Integer> copy = new ArrayList<>(report);
                 copy.remove(i);
                 if (isSafe(copy)) {
@@ -57,22 +57,17 @@ public class Day2 {
     }
 
     private boolean isSafe(List<Integer> report) {
-        boolean valid = true;
         for (int i = 0; i < report.size() - 1; ++i) {
             int diff = Math.abs((report.get(i) - report.get(i + 1)));
 
             if (diff > 3 || diff < 1) {
-                valid = false;
-                break;
+                return false;
             }
         }
         Object[] sorted = report.toArray(), reverseSorted = report.toArray();
         Arrays.sort(sorted);
         Arrays.sort(reverseSorted, Collections.reverseOrder());
-        if (!Arrays.equals(sorted, report.toArray()) && !Arrays.equals(reverseSorted, report.toArray())) {
-            valid = false;
-        }
 
-        return valid;
+        return Arrays.equals(sorted, report.toArray()) || Arrays.equals(reverseSorted, report.toArray());
     }
 }
