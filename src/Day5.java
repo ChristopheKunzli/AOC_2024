@@ -1,9 +1,9 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Day5 {
-    private List<Pair> pairs = new ArrayList<>();
-    private List<List<Integer>> numbers = new ArrayList<>();
+    private final List<Pair> pairs = new ArrayList<>();
+    private final List<List<Integer>> numbers = new ArrayList<>();
+    private final List<List<Integer>> incorrectPrints = new ArrayList<>();
 
     private record Pair(int left, int right) {
     }
@@ -17,14 +17,14 @@ public class Day5 {
 
     private void parse(List<String> text) {
         boolean flag = true;
-        for (int i = 0; i < text.size(); ++i) {
-            if (text.get(i).isEmpty()) {
+        for (String string : text) {
+            if (string.isEmpty()) {
                 flag = false;
                 continue;
             }
 
             if (flag) {
-                String[] parts = text.get(i).split("\\|");
+                String[] parts = string.split("\\|");
 
                 int a = Integer.parseInt(parts[0]);
                 int b = Integer.parseInt(parts[1]);
@@ -32,7 +32,7 @@ public class Day5 {
                 pairs.add(new Pair(a, b));
             } else {
                 List<Integer> list = new ArrayList<>();
-                for (String s : text.get(i).split(",")) {
+                for (String s : string.split(",")) {
                     list.add(Integer.parseInt(s));
                 }
                 numbers.add(list);
@@ -40,11 +40,64 @@ public class Day5 {
         }
     }
 
+    private boolean isCorrectOrder(List<Integer> pagesPrinting) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < pagesPrinting.size(); ++i) {
+            map.put(pagesPrinting.get(i), i);
+        }
+
+        for (Pair pair : pairs) {
+            if (map.containsKey(pair.left) && map.containsKey(pair.right) && map.get(pair.left) > map.get(pair.right)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     private int part1() {
-        return 0;
+        int sum = 0;
+
+        for (var pagesPrinting : numbers) {
+            if (isCorrectOrder(pagesPrinting)) {
+                sum += pagesPrinting.get(pagesPrinting.size() / 2);
+            } else {
+                incorrectPrints.add(pagesPrinting);
+            }
+        }
+
+        return sum;
+    }
+
+    private Map<Integer, Set<Integer>> getGraph() {
+        Map<Integer, Set<Integer>> graph = new HashMap<>();
+        for (Pair pair : pairs) {
+            graph.putIfAbsent(pair.left, new HashSet<>());
+            graph.putIfAbsent(pair.right, new HashSet<>());
+            graph.get(pair.left).add(pair.right);
+        }
+        return graph;
     }
 
     private int part2() {
-        return 0;
+        int sum = 0;
+        Map<Integer, Set<Integer>> graph = getGraph();
+
+        for (var pagesPrinting : incorrectPrints) {
+            //sort pagesPrinting using the graph as a comparator
+            pagesPrinting.sort((a, b) -> {
+                if (graph.containsKey(a) && graph.get(a).contains(b)) {
+                    return -1;
+                }
+                if (graph.containsKey(b) && graph.get(b).contains(a)) {
+                    return 1;
+                }
+                return 0;
+            });
+
+            sum += pagesPrinting.get(pagesPrinting.size() / 2);
+        }
+
+        return sum;
     }
 }
