@@ -9,7 +9,7 @@ final public class Utils {
         try (Stream<String> stream = Files.lines(Paths.get(fileName))) {
             stream.forEach(inputs::add);
         } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage());
+            //System.out.println("Error: " + e.getMessage());
         }
         return inputs;
     }
