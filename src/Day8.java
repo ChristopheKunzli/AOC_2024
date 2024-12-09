@@ -48,12 +48,10 @@ public class Day8 {
         int count = 0;
         for (char[] chars : grid) {
             for (char c : chars) {
-                System.out.print(c);
                 if (c == '#') {
                     ++count;
                 }
             }
-            System.out.println();
         }
         return count;
     }
