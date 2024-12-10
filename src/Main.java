@@ -9,6 +9,7 @@ public class Main {
         List<String> filesPaths = Utils.getStrings(args[0]);
 
         int i = 0;
+        new Day1().solve(filesPaths.get(i++));
         new Day2().solve(filesPaths.get(i++));
         new Day3().solve(filesPaths.get(i++));
         new Day4().solve(filesPaths.get(i++));
