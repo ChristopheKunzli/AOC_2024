@@ -87,14 +87,13 @@ public class Day9 {
         return -1;
     }
 
-    private boolean move(Character[] characters, int start, int len, int right) {
+    private void move(Character[] characters, int start, int len, int right) {
         int emptyStart = findSuitableEmptyBlock(characters, len, right);
-        if (emptyStart == -1) return false;
+        if (emptyStart == -1) return;
         for (int i = 0; i < len; ++i) {
             characters[emptyStart + i] = characters[start + i];
             characters[start + i] = ' ';
         }
-        return true;
     }
 
     private long part2() {
