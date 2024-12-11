@@ -18,19 +18,28 @@ public class Day9 {
         for (char c : line.toCharArray()) {
             int digit = c - '0';
             if (!skip) {
-                for(int i = 0; i < digit; ++i) {
+                for (int i = 0; i < digit; ++i) {
                     list.add((char) (index + '0'));
                 }
                 ++index;
             } else {
 
-                for(int i = 0; i < digit; ++i) {
+                for (int i = 0; i < digit; ++i) {
                     list.add(' ');
                 }
             }
             skip = !skip;
         }
         return list;
+    }
+
+    private long computeCheckSum(Character[] arr) {
+        long sum = 0;
+        for (int i = 0; i < arr.length; ++i) {
+            if (arr[i] == ' ') continue;
+            sum += (long) i * (arr[i] - '0');
+        }
+        return sum;
     }
 
     private long part1() {
@@ -48,28 +57,11 @@ public class Day9 {
             ++left;
             --right;
         }
-
-        long sum = 0;
-        for (int i = 0; i < arr.length && arr[i] != ' '; ++i) {
-            sum += (long) i * (arr[i] - '0');
-        }
-
-        boolean foundSpace = false;
-        boolean flag = false;
-        for (char c : arr) {
-            if (c == ' ') {
-                foundSpace = true;
-            } else if (foundSpace) {
-                flag = true;
-            }
-        }
-        if (flag) {
-            System.out.println("Found space before last digit");
-        }
-        return sum;
+        return computeCheckSum(arr);
     }
 
-    private int part2() {
-        return 0;
+    private long part2() {
+        Character[] characters = list.toArray(new Character[0]);
+        return -1;
     }
 }
