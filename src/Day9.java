@@ -23,7 +23,6 @@ public class Day9 {
                 }
                 ++index;
             } else {
-
                 for (int i = 0; i < digit; ++i) {
                     list.add(' ');
                 }
@@ -60,8 +59,56 @@ public class Day9 {
         return computeCheckSum(arr);
     }
 
-    private long part2() {
-        Character[] characters = list.toArray(new Character[0]);
+    private int findNextBlockStart(Character[] characters, int rightLimit) {
+        length = 0;
+        int i = rightLimit;
+        while (i >= 0 && characters[i] == ' ') --i;
+        char current = characters[i];
+        while (i >= 0 && characters[i] == current) {
+            --i;
+            ++length;
+        }
+        return i + 1;
+    }
+
+    int length;
+
+    private int findSuitableEmptyBlock(Character[] characters, int len, int limit) {
+        int i = 0;
+        while (i < limit - len) {
+            while (i < limit - len && characters[i] != ' ') ++i;
+            int count = 0, start = i;
+            while (i < limit - len && characters[i] == ' ') {
+                ++i;
+                ++count;
+                if (count >= len) return start;
+            }
+        }
         return -1;
     }
+
+    private boolean move(Character[] characters, int start, int len, int right) {
+        int emptyStart = findSuitableEmptyBlock(characters, len, right);
+        if (emptyStart == -1) return false;
+        for (int i = 0; i < len; ++i) {
+            characters[emptyStart + i] = characters[start + i];
+            characters[start + i] = ' ';
+        }
+        return true;
+    }
+
+    private long part2() {
+        Character[] characters = list.toArray(new Character[0]);
+        int right = characters.length - 1;
+
+        while (right >= 0) {
+            int nextBlockStart = findNextBlockStart(characters, right);
+            right = nextBlockStart - 1;
+            move(characters, nextBlockStart, length, right);
+        }
+
+        return computeCheckSum(characters);
+    }
+    //6431472344710
+    //6431472688582
 }
