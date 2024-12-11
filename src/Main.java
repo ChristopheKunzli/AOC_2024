@@ -19,5 +19,6 @@ public class Main {
         new Day8().solve(filesPaths.get(i++));
         new Day9().solve(filesPaths.get(i++));
         new Day10().solve(filesPaths.get(i++));
+        new Day11().solve(filesPaths.get(i++));
     }
 }
