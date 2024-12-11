@@ -24,7 +24,7 @@ public class Day11 {
         return blinkNTimes(stones, 75);
     }
 
-    List<Long> coomputeStone(Long stone) {
+    List<Long> computeStone(Long stone) {
         String stoneStr = "" + stone;
         if (stone == 0L) {
             return List.of(1L);
@@ -45,7 +45,7 @@ public class Day11 {
         for (int i = 0; i < n; i++) {
             Map<Long, Long> nextCount = new HashMap<>();
             for (Map.Entry<Long, Long> e : count.entrySet()) {
-                nextStones = coomputeStone(e.getKey());
+                nextStones = computeStone(e.getKey());
                 for (Long st : nextStones) {
                     nextCount.put(st, nextCount.getOrDefault(st, 0L) + e.getValue());
                 }
