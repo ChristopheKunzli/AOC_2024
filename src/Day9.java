@@ -109,6 +109,4 @@ public class Day9 {
 
         return computeCheckSum(characters);
     }
-    //6431472344710
-    //6431472688582
 }
