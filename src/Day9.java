@@ -102,8 +102,8 @@ public class Day9 {
 
         while (right >= 0) {
             int nextBlockStart = findNextBlockStart(characters, right);
-            right = nextBlockStart - 1;
             move(characters, nextBlockStart, length, right);
+            right = nextBlockStart - 1;
         }
 
         return computeCheckSum(characters);
