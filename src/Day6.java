@@ -13,6 +13,16 @@ public class Day6 {
             this.direction = direction;
         }
 
+        private void changeDirection() {
+            direction =  switch (direction) {
+                case '^' -> '>';
+                case '>' -> 'v';
+                case 'v' -> '<';
+                case '<' -> '^';
+                default -> 0;
+            };
+        }
+
         @Override
         public String toString() {
             return x + "," + y + direction;
@@ -47,16 +57,6 @@ public class Day6 {
         }
     }
 
-    private char getNextDirection(Point p) {
-        return switch (p.direction) {
-            case '^' -> '>';
-            case '>' -> 'v';
-            case 'v' -> '<';
-            case '<' -> '^';
-            default -> 0;
-        };
-    }
-
     private int part1() {
         while (true) {
             int nextX = currentPos.x, nextY = currentPos.y;
@@ -73,7 +73,7 @@ public class Day6 {
 
             char next = grid[nextX][nextY];
             if (next == '#') {
-                currentPos.direction = getNextDirection(currentPos);
+                currentPos.changeDirection();
             } else {
                 currentPos.x = nextX;
                 currentPos.y = nextY;
@@ -131,7 +131,7 @@ public class Day6 {
 
                 char next = jobGrid[nextX][nextY];
                 if (next == '#') {
-                    jobCurrentPos.direction = getNextDirection(jobCurrentPos);
+                    jobCurrentPos.changeDirection();
                 } else {
                     jobCurrentPos.x = nextX;
                     jobCurrentPos.y = nextY;
