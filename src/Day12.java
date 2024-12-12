@@ -33,7 +33,7 @@ public class Day12 {
         List<String> lines = Utils.getStrings(filePath);
         System.out.println("Day 12:");
         System.out.println("Part 1: " + part1(parse(lines)));
-        System.out.println("Part 2: " + part2(parse(lines)));
+        System.out.println("Part 2: " + part2();
     }
 
     private char[][] parse(List<String> lines) {
@@ -80,7 +80,7 @@ public class Day12 {
         return price;
     }
 
-    private int part2(char[][] grid) {
+    private int part2() {
         int price = 0;
 
         for (var region : regions) {
