@@ -8,19 +8,50 @@ public class Day12 {
         char type;
         int area;
         int perimeter;
-        Set<String> visited;
+        Set<String> coordinates;
 
-        public Region(char type) {
+        int gridHeight;
+        int gridWidth;
+
+        public Region(char type, int height, int width) {
             this.area = 0;
             this.perimeter = 0;
             this.type = type;
+            this.gridHeight = height;
+            this.gridWidth = width;
         }
 
         int countSides() {
             int sides = 0;
+
+            for (String cell : coordinates) {
+                String[] parts = cell.split(",");
+                int x = Integer.parseInt(parts[0]);
+                int y = Integer.parseInt(parts[1]);
+
+                boolean isTopLeftCorner = !coordinates.contains((x - 1) + "," + y) && !coordinates.contains(x + "," + (y - 1));
+                boolean isTopRightCorner = !coordinates.contains((x + 1) + "," + y) && !coordinates.contains(x + "," + (y - 1));
+                boolean isBottomLeftCorner = !coordinates.contains((x - 1) + "," + y) && !coordinates.contains(x + "," + (y + 1));
+                boolean isBottomRightCorner = !coordinates.contains((x + 1) + "," + y) && !coordinates.contains(x + "," + (y + 1));
+
+                boolean isInnerTopLeftCorner = (!coordinates.contains((x - 1) + "," + (y - 1)) && coordinates.contains((x - 1) + "," + y) && coordinates.contains(x + "," + (y - 1)));
+                boolean isInnerTopRightCorner = (!coordinates.contains((x + 1) + "," + (y - 1)) && coordinates.contains((x + 1) + "," + y) && coordinates.contains(x + "," + (y - 1)));
+                boolean isInnerBottomLeftCorner = (!coordinates.contains((x - 1) + "," + (y + 1)) && coordinates.contains((x - 1) + "," + y) && coordinates.contains(x + "," + (y + 1)));
+                boolean isInnerBottomRightCorner = (!coordinates.contains((x + 1) + "," + (y + 1)) && coordinates.contains((x + 1) + "," + y) && coordinates.contains(x + "," + (y + 1)));
+
+                if (isTopLeftCorner) ++sides;
+                if (isTopRightCorner) ++sides;
+                if (isBottomLeftCorner) ++sides;
+                if (isBottomRightCorner) ++sides;
+
+                if (isInnerTopLeftCorner) ++sides;
+                if (isInnerTopRightCorner) ++sides;
+                if (isInnerBottomLeftCorner) ++sides;
+                if (isInnerBottomRightCorner) ++sides;
+            }
+
             return sides;
         }
-
 
         public String toString() {
             return type + " Area: " + area + ", Perimeter: " + perimeter;
@@ -68,10 +99,10 @@ public class Day12 {
         for (int i = 0; i < grid.length; ++i) {
             for (int j = 0; j < grid[i].length; ++j) {
                 if (grid[i][j] != '#') {
-                    Region region = new Region(grid[i][j]);
+                    Region region = new Region(grid[i][j], grid.length, grid[i].length);
                     Set<String> visited = new HashSet<>();
                     exploreRegion(i, j, grid, region, visited);
-                    region.visited = visited;
+                    region.coordinates = visited;
                     regions.add(region);
                     price += region.area * region.perimeter;
                 }
@@ -84,8 +115,7 @@ public class Day12 {
         int price = 0;
 
         for (var region : regions) {
-            int sides = region.countSides();
-            price += region.area * sides;
+            price += region.area * region.countSides();
         }
 
         return price;
