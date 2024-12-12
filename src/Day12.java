@@ -33,7 +33,7 @@ public class Day12 {
         List<String> lines = Utils.getStrings(filePath);
         System.out.println("Day 12:");
         System.out.println("Part 1: " + part1(parse(lines)));
-        System.out.println("Part 2: " + part2();
+        System.out.println("Part 2: " + part2());
     }
 
     private char[][] parse(List<String> lines) {
