@@ -77,10 +77,9 @@ public class Day12 {
 
     private void exploreRegion(int x, int y, char[][] grid, Region region, Set<String> visited) {
         if (x < 0 || x >= grid.length || y < 0 || y >= grid[x].length || grid[x][y] != region.type) {
-            if (visited.contains(x + "," + y)) {
-                return;
+            if (!visited.contains(x + "," + y)) {
+                ++region.perimeter;
             }
-            ++region.perimeter;
             return;
         }
 
