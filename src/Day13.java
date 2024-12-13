@@ -59,7 +59,7 @@ public class Day13 {
         long b_term1 = machine.prizeY * machine.equation1.x - machine.prizeX * machine.equation1.y;
         long b_term2 = machine.equation2.y * machine.equation1.x - machine.equation2.x * machine.equation1.y;
 
-        long a_term1 = machine.prizeX - machine.equation2.x * (b_term1 / b_term2);
+        long a_term1 = machine.prizeX - (machine.equation2.x * (b_term1 / b_term2));
         long a_term2 = machine.equation1.x;
 
         if (b_term1 % b_term2 != 0 || a_term1 % a_term2 != 0) {
