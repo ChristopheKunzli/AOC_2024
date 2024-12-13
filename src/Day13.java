@@ -29,8 +29,8 @@ public class Day13 {
     private List<Machine> parse(List<String> lines) {
         List<Machine> machines = new ArrayList<>();
         for (int i = 0; i < lines.size(); ) {
-            String[] parts1 = lines.get(i).replace("Button A: X+", "").split(", Y+");
-            String[] parts2 = lines.get(i + 1).replace("Button B: X+", "").split(", Y+");
+            String[] parts1 = lines.get(i).replace("Button A: X+", "").split(", Y\\+");
+            String[] parts2 = lines.get(i + 1).replace("Button B: X+", "").split(", Y\\+");
             String[] parts3 = lines.get(i + 2).replace("Prize: X=", "").split(", Y=");
             Button button1 = new Button(Integer.parseInt(parts1[0]), Integer.parseInt(parts1[1]));
             Button button2 = new Button(Integer.parseInt(parts2[0]), Integer.parseInt(parts2[1]));
