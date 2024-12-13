@@ -66,9 +66,8 @@ public class Day13 {
             return 0L;
         }
 
-        long b = (machine.prizeY * machine.equation1.x - machine.prizeX * machine.equation1.y)
-                / (machine.equation2.y * machine.equation1.x - machine.equation2.x * machine.equation1.y);
-        long a = (machine.prizeX - b * machine.equation2.x) / machine.equation1.x;
+        long b = b_term1 / b_term2;
+        long a = a_term1 / a_term2;
 
         return a * 3L + b;
     }
