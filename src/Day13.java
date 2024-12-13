@@ -12,9 +12,9 @@ public class Day13 {
     }
 
     static class Equation {
-        int x, y;
+        long x, y;
 
-        public Equation(int x, int y) {
+        public Equation(long x, long y) {
             this.x = x;
             this.y = y;
         }
@@ -27,7 +27,7 @@ public class Day13 {
     static class Machine {
         Equation equation1;
         Equation equation2;
-        int prizeX, prizeY;
+        long prizeX, prizeY;
 
         public Machine(Equation equation1, Equation equation2, int prizeX, int prizeY) {
             this.equation1 = equation1;
@@ -55,11 +55,39 @@ public class Day13 {
         return machines;
     }
 
-    private int part1() {
-        return 0;
+    private long compute(Machine machine) {
+        long b_term1 = machine.prizeY * machine.equation1.x - machine.prizeX * machine.equation1.y;
+        long b_term2 = machine.equation2.y * machine.equation1.x - machine.equation2.x * machine.equation1.y;
+
+        long a_term1 = machine.prizeX - machine.equation2.x * (b_term1 / b_term2);
+        long a_term2 = machine.equation1.x;
+
+        if (b_term1 % b_term2 != 0 || a_term1 % a_term2 != 0) {
+            return 0L;
+        }
+
+        long b = (machine.prizeY * machine.equation1.x - machine.prizeX * machine.equation1.y)
+                / (machine.equation2.y * machine.equation1.x - machine.equation2.x * machine.equation1.y);
+        long a = (machine.prizeX - b * machine.equation2.x) / machine.equation1.x;
+
+        return a * 3L + b;
     }
 
-    private int part2() {
-        return 0;
+    private long part1() {
+        long sum = 0;
+        for (Machine machine : machines) {
+            sum += compute(machine);
+        }
+        return sum;
+    }
+
+    private long part2() {
+        long sum = 0;
+        for (Machine machine : machines) {
+            machine.prizeX += 10000000000000L;
+            machine.prizeY += 10000000000000L;
+            sum += compute(machine);
+        }
+        return sum;
     }
 }
