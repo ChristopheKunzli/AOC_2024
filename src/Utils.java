@@ -25,7 +25,7 @@ final public class Utils {
             if (!new File(path).exists()) {
                 new File(path).mkdir();
             }
-            File outputFile = new File("results/" + number + ".png");
+            File outputFile = new File(path + number + ".png");
             ImageIO.write(image, "png", outputFile);
             //System.out.println("Image saved to " + outputFile.getAbsolutePath());
         } catch (IOException e) {
