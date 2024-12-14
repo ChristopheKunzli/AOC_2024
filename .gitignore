@@ -1,6 +1,7 @@
 inputFiles.txt
 inputs/
 .idea/
+results/
 
 ### IntelliJ IDEA ###
 out/
