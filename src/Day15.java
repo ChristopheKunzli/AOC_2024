@@ -166,15 +166,10 @@ public class Day15 {
     }
 
     private long part2(char[][] grid) {
-        printGrid(grid);
-        System.out.println();
         robotX = startX;
         robotY = startY;
         for (char c : moves) {
             moveLargeBoxes(c, grid);
-            System.out.println(c);
-            printGrid(grid);
-            System.out.println();
         }
         return computeGPS(grid, '[');
     }
