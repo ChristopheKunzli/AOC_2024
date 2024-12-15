@@ -108,7 +108,7 @@ public class Day14 {
             for (Robot robot : robots) {
                 ++grid[robot.y][robot.x];
             }
-            Utils.generateImage(grid, i, "results/");
+            //Utils.generateImage(grid, i, "results/");
         }
         return 0;
     }
