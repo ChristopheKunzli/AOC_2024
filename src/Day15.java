@@ -2,18 +2,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day15 {
-    private char[][] grid;
-    private List<Character> moves = new ArrayList<>();
+    private final List<Character> moves = new ArrayList<>();
     int robotX, robotY;
 
     public void solve(String filePath) {
-        parse(Utils.getStrings(filePath));
+        List<String> lines = Utils.getStrings(filePath);
         System.out.println("Day 15");
-        System.out.println("Part 1: " + part1());
+        System.out.println("Part 1: " + part1(parse(lines)));
         System.out.println("Part 2: " + part2());
     }
 
-    private void parse(List<String> lines) {
+    private char[][] parse(List<String> lines) {
+        char[][] grid = null;
         List<char[]> rows = new ArrayList<>();
         boolean flag = false;
         for (String line : lines) {
@@ -38,18 +38,10 @@ public class Day15 {
                 }
             }
         }
+        return grid;
     }
 
-    private void printGrid() {
-        for (var line : grid) {
-            for (var c : line) {
-                System.out.print(c);
-            }
-            System.out.println();
-        }
-    }
-
-    private void move(char c) {
+    private void move(char c, char[][] grid) {
         int dx = 0, dy = 0;
         switch (c) {
             case '^':
@@ -64,18 +56,6 @@ public class Day15 {
             case '>':
                 dx = 1;
                 break;
-        }
-
-        // do nothing if there is a wall on the way
-        if (grid[robotY + dy][robotX + dx] == '#') return;
-
-        //move one step if there is an empty space
-        if (grid[robotY + dy][robotX + dx] == '.') {
-            grid[robotY + dy][robotX + dx] = grid[robotY][robotX];
-            grid[robotY][robotX] = '.';
-            robotX += dx;
-            robotY += dy;
-            return;
         }
 
         int x = robotX + dx, y = robotY + dy;
@@ -95,7 +75,7 @@ public class Day15 {
         robotY += dy;
     }
 
-    private long computeGPS() {
+    private long computeGPS(char[][] grid) {
         long sum = 0;
         for (int i = 0; i < grid.length; ++i) {
             for (int j = 0; j < grid[i].length; ++j) {
@@ -107,15 +87,11 @@ public class Day15 {
         return sum;
     }
 
-    private long part1() {
+    private long part1(char[][] grid) {
         for (char c : moves) {
-            move(c);
-            //System.out.println(c);
-            //printGrid();
-            //System.out.println();
+            move(c, grid);
         }
-        //printGrid();
-        return computeGPS();
+        return computeGPS(grid);
     }
 
     private long part2() {
