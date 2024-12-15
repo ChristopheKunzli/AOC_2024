@@ -34,7 +34,7 @@ public class Day14 {
 
         System.out.println("Day 14");
         System.out.println("Part 1: " + part1(robots));
-        System.out.println("Part 2: " + part2(robots2));
+        System.out.println("Part 2: " + part2(robots2) + " (Check results folder)");
     }
 
     private List<Robot> parse(List<String> lines) {
