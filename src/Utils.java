@@ -39,8 +39,8 @@ final public class Utils {
 
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_BYTE_BINARY);
 
-        for (int i = 0; i < height; i++) {
-            for (int j = 0; j < width; j++) {
+        for (int i = 0; i < height; ++i) {
+            for (int j = 0; j < width; ++j) {
                 int color = (grid[i][j] == 0) ? 0xFFFFFF : 0x000000;
                 image.setRGB(j, i, color);
             }
