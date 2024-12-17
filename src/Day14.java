@@ -83,13 +83,12 @@ public class Day14 {
             for (int j = 0; j < WIDTH; ++j) {
                 boolean isTop = i < HEIGHT / 2;
                 boolean isLeft = j < WIDTH / 2;
-                if (i == HEIGHT / 2 || j == WIDTH / 2) {
-                } else if (grid[i][j] != 0) {
+                if (i != HEIGHT / 2 && j != WIDTH / 2 && grid[i][j] != 0) {
                     if(isTop && isLeft) {
                         topLeft += grid[i][j];
-                    } else if(isTop && !isLeft) {
+                    } else if(isTop) {
                         topRight += grid[i][j];
-                    } else if(!isTop && isLeft) {
+                    } else if(isLeft) {
                         bottomLeft += grid[i][j];
                     } else {
                         bottomRight += grid[i][j];
