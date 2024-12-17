@@ -111,15 +111,6 @@ public class Day15 {
         return sum;
     }
 
-    private void printGrid(char[][] grid) {
-        for (char[] row : grid) {
-            for (char c : row) {
-                System.out.print(c);
-            }
-            System.out.println();
-        }
-    }
-
     private long part1(char[][] grid) {
         for (char c : moves) {
             move(c, grid);
@@ -127,49 +118,54 @@ public class Day15 {
         return computeGPS(grid, 'O');
     }
 
-    private void moveLargeBoxes(char move, char[][] grid) {
-        int dx = 0, dy = 0;
-        switch (move) {
-            case '^':
-                dy = -1;
-                break;
-            case 'v':
-                dy = 1;
-                break;
-            case '<':
-                dx = -1;
-                break;
-            case '>':
-                dx = 1;
-                break;
-        }
-
-        int x = robotX + dx, y = robotY + dy;
-        while (grid[y][x] != '.') {
-            if (grid[y][x] == '#') return;
-            x += dx;
-            y += dy;
-        }
-
-        if (move == '<' || move == '>') {
-            while (robotX != x) {
-                grid[y][x] = grid[y - dy][x - dx];
-                x -= dx;
+    private boolean canMove(char[][] grid, int x, int y, int dy) {
+        if (grid[y + dy][x] == '.') {
+            return true;
+        } else if (grid[y + dy][x] == '[' || grid[y + dy][x] == ']') {
+            if (grid[y + dy][x] == '[') {
+                return canMove(grid, x + 1, y + dy, dy) && canMove(grid, x, y + dy, dy);
+            } else {
+                return canMove(grid, x - 1, y + dy, dy) && canMove(grid, x, y + dy, dy);
             }
-        } else {
-
         }
+        return false;
+    }
 
-        grid[robotY][robotX] = '.';
-        robotX += dx;
-        robotY += dy;
+    private void executeLargeMove(char[][] grid, int x, int y, int dy) {
+        if (grid[y + dy][x] == '.') {
+            grid[y + dy][x] = grid[y][x];
+            grid[y][x] = '.';
+        } else if (grid[y + dy][x] == '[' || grid[y + dy][x] == ']') {
+            if (grid[y + dy][x] == '[') {
+                executeLargeMove(grid, x + 1, y + dy, dy);
+                executeLargeMove(grid, x, y + dy, dy);
+            } else {
+                executeLargeMove(grid, x - 1, y + dy, dy);
+                executeLargeMove(grid, x, y + dy, dy);
+            }
+
+            grid[y + dy][x] = grid[y][x];
+            grid[y][x] = '.';
+        }
+    }
+
+    private void moveLargeBoxesUpOrDown(char move, char[][] grid) {
+        int dy = move == '^' ? -1 : 1;
+        if (canMove(grid, robotX, robotY, dy)) {
+            executeLargeMove(grid, robotX, robotY, dy);
+            robotY += dy;
+        }
     }
 
     private long part2(char[][] grid) {
         robotX = startX;
         robotY = startY;
         for (char c : moves) {
-            moveLargeBoxes(c, grid);
+            if (c == '<' || c == '>') {
+                move(c, grid);
+            } else {
+                moveLargeBoxesUpOrDown(c, grid);
+            }
         }
         return computeGPS(grid, '[');
     }
