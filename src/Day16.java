@@ -139,7 +139,10 @@ public class Day16 {
     }
 
     private long part1(char[][] labyrinth) {
-        return explore(labyrinth, 0, new Path(start, '>'));
+        for(var li : labyrinth){
+            //System.out.println(li);
+        }
+        return -1;//explore(labyrinth, 0, new Path(start, '>'));
     }
 
     private int part2() {

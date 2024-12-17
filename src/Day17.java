@@ -2,8 +2,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Day17 {
-    int pc = 0;//program counter
-    long a = 0, b = 0, c = 0;//registers
+    long baseA = 0;
     List<Integer> program = new ArrayList<>();
 
     public void solve(String filePath) {
@@ -14,55 +13,16 @@ public class Day17 {
     }
 
     private void parse(List<String> lines) {
-        a = Long.parseLong(lines.get(0).replace("Register A: ", ""));
-        b = Long.parseLong(lines.get(1).replace("Register B: ", ""));
-        c = Long.parseLong(lines.get(2).replace("Register C: ", ""));
+        baseA = Long.parseLong(lines.get(0).replace("Register A: ", ""));
+        //b = Long.parseLong(lines.get(1).replace("Register B: ", ""));
+        //c = Long.parseLong(lines.get(2).replace("Register C: ", ""));
 
         for (String num : lines.get(4).replace("Program: ", "").split(",")) {
             program.add(Integer.parseInt(num));
         }
     }
 
-    private String part1() {
-        List<Integer> output = new ArrayList<>();
-        while (pc < program.size()) {
-            int opcode = program.get(pc);
-            int operand = program.get(pc + 1);
-            switch (opcode) {
-                case 0:
-                    adv(operand);
-                    break;
-                case 1:
-                    bxl(operand);
-                    break;
-                case 2:
-                    bst(operand);
-                    break;
-                case 3:
-                    jnz(operand);
-                    break;
-                case 4:
-                    bxc();
-                    break;
-                case 5:
-                    output.add(out(operand));
-                    break;
-                case 6:
-                    bdv(operand);
-                    break;
-                case 7:
-                    cdv(operand);
-                    break;
-                default:
-                    System.out.println("Invalid opcode: " + opcode);
-                    return "";
-            }
-            pc += 2;
-        }
-        return String.join(",", output.stream().map(String::valueOf).toList());
-    }
-
-    private long getComboOperand(int operand) {
+    private long getComboOperand(int operand, long a, long b, long c) {
         return switch (operand) {
             case 4 -> a;
             case 5 -> b;
@@ -72,47 +32,57 @@ public class Day17 {
         };
     }
 
-    private void adv(int operand) {
-        long pow = getComboOperand(operand);
-        long denominator = (long) Math.pow(2, pow);
-        a = Math.floorDiv(a, denominator);
-    }
+    private List<Integer> runProgram(long a) {
+        List<Integer> output = new ArrayList<>();
+        int pc = 0;
+        long b = 0L, c = 0L;
 
-    private void bxl(int operand) {
-        b = b ^ operand;
-    }
+        while (pc < program.size()) {
+            int opcode = program.get(pc);
+            int operand = program.get(pc + 1);
 
-    private void bst(int operand) {
-        b = getComboOperand(operand) % 8;
-    }
-
-    private void jnz(int operand) {
-        if (a != 0) {
-            pc = operand - 2;
+            long pow = getComboOperand(operand, a, b, c);
+            long denominator = (long) Math.pow(2, pow);
+            switch (opcode) {
+                case 0:
+                    a = Math.floorDiv(a, denominator);
+                    break;
+                case 1:
+                    b = b ^ operand;
+                    break;
+                case 2:
+                    b = getComboOperand(operand, a, b, c) % 8;
+                    break;
+                case 3:
+                    if (a != 0) pc = operand - 2;
+                    break;
+                case 4:
+                    b = b ^ c;
+                    break;
+                case 5:
+                    output.add((int) getComboOperand(operand, a, b, c) % 8);
+                    break;
+                case 6:
+                    b = Math.floorDiv(a, denominator);
+                    break;
+                case 7:
+                    c = Math.floorDiv(a, denominator);
+                    break;
+                default:
+                    System.out.println("Invalid opcode: " + opcode);
+                    return output;
+            }
+            pc += 2;
         }
+        return output;
     }
 
-    private void bxc() {
-        b = b ^ c;
-    }
-
-    private int out(int operand) {
-        return (int) getComboOperand(operand) % 8;
-    }
-
-    private void bdv(int operand) {
-        long pow = getComboOperand(operand);
-        long denominator = (long) Math.pow(2, pow);
-        b = Math.floorDiv(a, denominator);
-    }
-
-    private void cdv(int operand) {
-        long pow = getComboOperand(operand);
-        long denominator = (long) Math.pow(2, pow);
-        c = Math.floorDiv(a, denominator);
+    private String part1() {
+        List<Integer> output = runProgram(baseA);
+        return String.join(",", output.stream().map(String::valueOf).toList());
     }
 
     private long part2() {
-        return 0;
+        return -1;
     }
 }
