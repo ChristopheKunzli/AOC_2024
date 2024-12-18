@@ -54,7 +54,8 @@ public class Day18 {
                     nextStep.add(left);
                 if (isInBounds(right) && !seen.contains(right.toString()) && grid[right.y][right.x] == '.')
                     nextStep.add(right);
-                if (isInBounds(up) && !seen.contains(up.toString()) && grid[up.y][up.x] == '.') nextStep.add(up);
+                if (isInBounds(up) && !seen.contains(up.toString()) && grid[up.y][up.x] == '.')
+                    nextStep.add(up);
                 if (isInBounds(down) && !seen.contains(down.toString()) && grid[down.y][down.x] == '.')
                     nextStep.add(down);
 
