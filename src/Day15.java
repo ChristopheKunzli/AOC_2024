@@ -132,21 +132,15 @@ public class Day15 {
     }
 
     private void executeLargeMove(char[][] grid, int x, int y, int dy) {
-        if (grid[y + dy][x] == '.') {
-            grid[y + dy][x] = grid[y][x];
-            grid[y][x] = '.';
-        } else if (grid[y + dy][x] == '[' || grid[y + dy][x] == ']') {
-            if (grid[y + dy][x] == '[') {
-                executeLargeMove(grid, x + 1, y + dy, dy);
-                executeLargeMove(grid, x, y + dy, dy);
-            } else {
-                executeLargeMove(grid, x - 1, y + dy, dy);
-                executeLargeMove(grid, x, y + dy, dy);
-            }
-
-            grid[y + dy][x] = grid[y][x];
-            grid[y][x] = '.';
+        if (grid[y + dy][x] == '[') {
+            executeLargeMove(grid, x + 1, y + dy, dy);
+            executeLargeMove(grid, x, y + dy, dy);
+        } else if (grid[y + dy][x] == ']') {
+            executeLargeMove(grid, x - 1, y + dy, dy);
+            executeLargeMove(grid, x, y + dy, dy);
         }
+        grid[y + dy][x] = grid[y][x];
+        grid[y][x] = '.';
     }
 
     private void moveLargeBoxesUpOrDown(char move, char[][] grid) {
