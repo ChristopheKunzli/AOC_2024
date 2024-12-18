@@ -1,7 +1,8 @@
 import java.util.*;
 
 public class Day18 {
-    private final static int DIMENSION = 71;
+    private final static int DIMENSION = 7;
+    private final static int BYTES = 12;
 
     record Coord(int x, int y) {
         public String toString() {
@@ -9,7 +10,7 @@ public class Day18 {
         }
     }
 
-    private List<Coord> coords = new ArrayList<>();
+    private final List<Coord> coords = new ArrayList<>();
 
     public void solve(String filePath) {
         parse(Utils.getStrings(filePath));
@@ -31,7 +32,7 @@ public class Day18 {
 
     private int part1() {
         char[][] grid = new char[DIMENSION][DIMENSION];
-        for (int i = 0; i < 1024; ++i) {
+        for (int i = 0; i < BYTES; ++i) {
             grid[coords.get(i).y][coords.get(i).x] = '#';
         }
         for (int i = 0; i < grid.length; ++i) {
@@ -49,7 +50,6 @@ public class Day18 {
         seen.add(queue.peek().toString());
 
         int pathLength = 0;
-        int count = 0;
         while (!queue.isEmpty()) {
             Queue<Coord> nextStep = new LinkedList<>();
             while (!queue.isEmpty()) {
@@ -57,7 +57,6 @@ public class Day18 {
                 if (current.x == DIMENSION - 1 && current.y == DIMENSION - 1) {
                     return pathLength;
                 }
-                //grid[current.y][current.x] = 'p';
 
                 Coord left = new Coord(current.x - 1, current.y);
                 Coord right = new Coord(current.x + 1, current.y);
@@ -76,7 +75,6 @@ public class Day18 {
             }
             queue = nextStep;
             ++pathLength;
-            System.out.println(pathLength);
         }
 
         return pathLength;
