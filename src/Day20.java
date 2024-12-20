@@ -1,13 +1,15 @@
 import java.util.*;
 
 public class Day20 {
-
+    int[][] grid;
     int startX, startY;
     int endX, endY;
 
     public void solve(String filePath) {
+        grid = parse(Utils.getStrings(filePath));
+        getDistances(grid, startX, startY, new HashSet<>());
         System.out.println("Day 19");
-        System.out.println("Part 1: " + part1(parse(Utils.getStrings(filePath))));
+        System.out.println("Part 1: " + part1());
         System.out.println("Part 2: " + part2());
     }
 
@@ -32,11 +34,6 @@ public class Day20 {
 
     private boolean isInBounds(int[][] grid, int x, int y) {
         return x >= 0 && y >= 0 && x < grid[0].length && y < grid.length;
-    }
-
-    private boolean hasNeighbour(int[][] grid, int x, int y, int dx, int dy) {
-        if (!isInBounds(grid, x + dx, y + dy)) return false;
-        return grid[y + dy][x + dx] != -1;
     }
 
     private void getDistances(int[][] grid, int startX, int startY, Set<String> visited) {
@@ -68,20 +65,21 @@ public class Day20 {
         return grid[y][x] - grid[y + dy][x + dx];
     }
 
-    private int part1(int[][] grid) {
-        Set<String> visited = new HashSet<>();
-        getDistances(grid, endX, endY, visited);
+    private int solution (int[][] grid, int size, int minSavedTime){
         Map<Integer, Integer> count = new HashMap<>();
-
-        int[][] cheatPoints = new int[][]{{0, 2}, {0, -2}, {2, 0}, {-2, 0}, {1, 1}, {-1, 1}, {1, -1}, {-1, 1}};
 
         for (int i = 0; i < grid.length; ++i) {
             for (int j = 0; j < grid[0].length; ++j) {
                 if (grid[i][j] > 0) {
-                    for (int[] cheat : cheatPoints) {
-                        int timeSaved = secondsSaved(grid, j, i, cheat[0], cheat[1]) - 2;
-                        if (timeSaved > 0) {
-                            count.put(timeSaved, count.getOrDefault(timeSaved, 0) + 1);
+                    for (int height = -size; height <= size; ++height) {
+                        for (int width = -size; width <= size; ++width) {
+                            int distance = Math.abs(height) + Math.abs(width);
+                            if (distance <= size) {
+                                int timeSaved = secondsSaved(grid, j, i, width, height) - distance;
+                                if (timeSaved > 0) {
+                                    count.put(timeSaved, count.getOrDefault(timeSaved, 0) + 1);
+                                }
+                            }
                         }
                     }
                 }
@@ -91,7 +89,7 @@ public class Day20 {
         int sum = 0;
 
         for (var e : count.entrySet()) {
-            if (e.getKey() >= 100) {
+            if (e.getKey() >= minSavedTime) {
                 sum += e.getValue();
             }
         }
@@ -99,7 +97,11 @@ public class Day20 {
         return sum;
     }
 
+    private int part1() {
+        return solution(grid, 2, 100);
+    }
+
     private int part2() {
-        return 0;
+       return solution(grid, 20, 100);
     }
 }
