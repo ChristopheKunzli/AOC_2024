@@ -39,46 +39,64 @@ public class Day20 {
         return grid[y + dy][x + dx] != -1;
     }
 
+    private void getDistances(int[][] grid, int startX, int startY, Set<String> visited) {
+        Queue<int[]> queue = new LinkedList<>();
+        queue.add(new int[]{startX, startY, 0});
+        visited.add(startX + ";" + startY);
 
-    private void getDistances(int[][] grid, int x, int y, int currentDistance, Set<String> visited) {
-        if (!isInBounds(grid, x, y) || grid[y][x] == -1 || visited.contains(x + ";" + y)) return;
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
 
-        grid[y][x] = currentDistance;
-        visited.add(x + ";" + y);
+        while (!queue.isEmpty()) {
+            int[] current = queue.poll();
+            int x = current[0], y = current[1];
+            int distance = current[2];
 
-        getDistances(grid, x + 1, y, grid[y][x] + 1, visited);
-        getDistances(grid, x - 1, y, grid[y][x] + 1, visited);
-        getDistances(grid, x, y + 1, grid[y][x] + 1, visited);
-        getDistances(grid, x, y - 1, grid[y][x] + 1, visited);
+            grid[y][x] = distance;
 
-        for (int[] dir : new int[][]{{0, 0}, {0, 1}, {0, -1}, {1, 0}, {-1, 0}}) {
-            if (hasNeighbour(grid, x, y, dir[0], dir[1])) {
-                grid[y][x] = Math.min(grid[y + dir[1]][x + dir[0]] + 1, grid[y][x]);
+            for (int[] dir : directions) {
+                int newX = x + dir[0], newY = y + dir[1];
+                if (isInBounds(grid, newX, newY) && grid[newY][newX] != -1 && !visited.contains(newX + ";" + newY)) {
+                    queue.add(new int[]{newX, newY, distance + 1});
+                    visited.add(newX + ";" + newY);
+                }
             }
         }
     }
 
-    private void displayGrid(int[][] grid) {
-        for (var l : grid) {
-            for (int e : l) {
-                if (e == -1) {
-                    System.out.print("  #");
-                } else {
-                    System.out.printf("%3s", ("" + e));
-                }
-            }
-            System.out.println();
-        }
-        System.out.println();
+    private int secondsSaved(int[][] grid, int x, int y, int dx, int dy) {
+        if (!isInBounds(grid, x + dx, y + dy) || grid[y + dy][x + dx] == -1) return 0;
+        return grid[y][x] - grid[y + dy][x + dx];
     }
 
     private int part1(int[][] grid) {
         Set<String> visited = new HashSet<>();
-        getDistances(grid, startX, startY, 0, visited);
-        displayGrid(grid);
+        getDistances(grid, endX, endY, visited);
         Map<Integer, Integer> count = new HashMap<>();
 
-        return 0;
+        int[][] cheatPoints = new int[][]{{0, 2}, {0, -2}, {2, 0}, {-2, 0}, {1, 1}, {-1, 1}, {1, -1}, {-1, 1}};
+
+        for (int i = 0; i < grid.length; ++i) {
+            for (int j = 0; j < grid[0].length; ++j) {
+                if (grid[i][j] > 0) {
+                    for (int[] cheat : cheatPoints) {
+                        int timeSaved = secondsSaved(grid, j, i, cheat[0], cheat[1]) - 2;
+                        if (timeSaved > 0) {
+                            count.put(timeSaved, count.getOrDefault(timeSaved, 0) + 1);
+                        }
+                    }
+                }
+            }
+        }
+
+        int sum = 0;
+
+        for (var e : count.entrySet()) {
+            if (e.getKey() >= 100) {
+                sum += e.getValue();
+            }
+        }
+
+        return sum;
     }
 
     private int part2() {
